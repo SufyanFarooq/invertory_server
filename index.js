@@ -5,6 +5,8 @@ import dbConnection from './connection/db.js';
 import products from "./routes/product.route.js";
 import items from "./routes/item.route.js";
 import department from "./routes/department.route.js";
+import customer from "./routes/customers.route.js";
+
 
 
 
@@ -17,6 +19,8 @@ app.use(cors());
 app.use("/api", products);
 app.use("/api", items);
 app.use("/api", department);
+app.use("/api", customer);
+
 
 
 app.get("/", (req, res) => {
