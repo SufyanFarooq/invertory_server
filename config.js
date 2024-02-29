@@ -1,1 +1,1 @@
-export const db_url = "mongodb://localhost:27017/inventorysystem";
+export const db_url = "mongodb+srv://usman:usman7323@vrcsmm.mfwecqy.mongodb.net/vrcsmm?retryWrites=true&w=majority";
