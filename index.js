@@ -4,6 +4,8 @@ import bodyParser from "body-parser";
 import dbConnection from './connection/db.js';
 import products from "./routes/product.route.js";
 import items from "./routes/item.route.js";
+import department from "./routes/department.route.js";
+
 
 
 const app = express();
@@ -14,6 +16,8 @@ app.use(cors());
 // define routes
 app.use("/api", products);
 app.use("/api", items);
+app.use("/api", department);
+
 
 app.get("/", (req, res) => {
     res.status(200).send("ticket server running successfully")

@@ -1,7 +1,10 @@
 import mongoose from 'mongoose';
 
 const itemSchema = new mongoose.Schema({
-    name: String
+    name: {
+        type: String,
+        required: true
+    }
 });
 
 export const Item = mongoose.model('Item', itemSchema);

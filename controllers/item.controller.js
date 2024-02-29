@@ -70,7 +70,6 @@ export const updateItem = async (req, res) => {
     try {
         const item = await Item.findByIdAndUpdate(req.params.id, {
             name: req.body.name,
-            price: req.body.price,
         }, { new: true });
 
         if (!item) res.status(404).json({ status: false, message: "Item not found" });
