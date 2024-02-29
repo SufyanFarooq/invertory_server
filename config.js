@@ -1,1 +1,1 @@
-export const db_url = "mongodb+srv://usman:usman7323@vrcsmm.mfwecqy.mongodb.net/vrcsmm?retryWrites=true&w=majority";
+export const db_url = "mongodb+srv://sufyan:Sufi2580@cluster0.cfagffx.mongodb.net/";
