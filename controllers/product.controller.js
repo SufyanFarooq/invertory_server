@@ -22,7 +22,7 @@ export const getProductbyId = async (req, res) => {
         if (!product) res.status(404).send('Product not found');
         else res.status(400).json({ status: true, message: err, product });
     } catch (error) {
-        res.status(500).json({ status: false, message: err });
+        res.status(500).json({ status: false, message: error });
     }
 
 };
@@ -37,7 +37,7 @@ export const updateProduct = async (req, res) => {
         if (!product) res.status(404).send('Product not found');
         else res.status(400).json({ status: false, message: err, product });
     } catch (error) {
-        res.status(400).json({ status: false, message: err });
+        res.status(400).json({ status: false, message: error });
     }
 };
 
@@ -48,7 +48,7 @@ export const deleteProduct = async (req, res) => {
         if (!product) res.status(404).send('Product not found');
         else res.send(product);
     } catch (error) {
-        res.status(500).json({ status: false, message: err });
+        res.status(500).json({ status: false, message: error });
     }
 
 };
