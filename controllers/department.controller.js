@@ -81,7 +81,7 @@ export const updateDepartment = async (req, res) => {
 
 export const deleteDepartment = async (req, res) => {
     try {
-        const department = await Department.findByIdAndRemove(req.params.id);
+        const department = await Department.findByIdAndDelete(req.params.id);
 
         if (!department) res.status(404).json({ status: false, message: "Department not found" });
         else res.status(200).json({ status: true, message: "Department deleted successfully", department });
