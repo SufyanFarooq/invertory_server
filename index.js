@@ -6,6 +6,8 @@ import products from "./routes/product.route.js";
 import items from "./routes/item.route.js";
 import department from "./routes/department.route.js";
 import customer from "./routes/customers.route.js";
+import bill from "./routes/bill.route.js";
+
 
 
 
@@ -20,6 +22,8 @@ app.use("/api", products);
 app.use("/api", items);
 app.use("/api", department);
 app.use("/api", customer);
+app.use("/api", bill);
+
 
 
 
