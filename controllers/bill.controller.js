@@ -1,6 +1,6 @@
 import { Bill } from "../schemas/bill.schema.js";
 import ExcelJS from "exceljs";
-
+import easyinvoice from "easyinvoice"
 export const createBill = async (req, res) => {
     const bill = new Bill({
         ...req.body
@@ -118,64 +118,134 @@ export const getBillAsExcel = async (req, res) => {
         }
 
         const workbook = new ExcelJS.Workbook();
-        const worksheet = workbook.addWorksheet('Bill');
+        const worksheet = workbook.addWorksheet('Invoice');
 
-        // Add headers for the "BILL FORMATE" section
+        // Set the properties of the worksheet
+        worksheet.properties.defaultRowHeight = 25;
+
+        // Create a reusable style
+        const style = {
+            font: { name: 'Arial', size: 10 },
+            alignment: { vertical: 'middle', horizontal: 'center' }
+        };
+
+        // Add headers for the "INVOICE FORMATE" section
         worksheet.columns = [
-            { header: 'Product', key: 'product' },
-            { header: 'Unit Rate', key: 'unitRate' },
-            { header: 'Qty.', key: 'quantity' },
-            { header: 'Amount', key: 'amount' },
-            { header: 'GST 18%', key: 'gst' },
-            { header: 'Total Amount', key: 'totalAmount' }
+            { header: 'Product ID', key: 'productId', width: 10, style },
+            { header: 'Product Name', key: 'productName', width: 30, style },
+            { header: 'QTY', key: 'quantity', width: 10, style },
+            { header: 'Unit Price', key: 'unitPrice', width: 10, style },
+            { header: 'Amount', key: 'amount', width: 10, style },
+            { header: 'GST 18%', key: 'gst', width: 10, style },
+            { header: 'Sales Tax Amount', key: 'salesTaxAmount', width: 15, style },
+            { header: 'Grand Total', key: 'grandTotal', width: 15, style }
         ];
 
-        // Add data for each product in the "BILL FORMATE" section
+        // Add data for each product in the "INVOICE FORMATE" section
         let totalGST = 0;
         let totalAmount = 0;
-        bill.products.forEach(product => {
+        bill.products.forEach((product, index) => {
             const amount = product.price * product.quantity;
             const gst = amount * (product.saleTaxPercentage / 100);
             const total = amount + gst;
 
             worksheet.addRow({
-                product: product.name,
-                unitRate: product.price,
+                productId: index + 1,
+                productName: product.name,
                 quantity: product.quantity,
+                unitPrice: product.price,
                 amount: amount,
                 gst: gst,
-                totalAmount: total
-            });
+                salesTaxAmount: gst,
+                grandTotal: total
+            }, 'n');
 
             totalGST += gst;
             totalAmount += total;
         });
 
-        // Add total row in the "BILL FORMATE" section
-        worksheet.addRow({
-            unitRate: 'Total:',
+        // Add total row in the "INVOICE FORMATE" section
+        const totalRow = worksheet.addRow({
+            productName: 'Total:',
             amount: totalAmount - totalGST,
-            gst: totalGST,
-            totalAmount: totalAmount
+            salesTaxAmount: totalGST,
+            grandTotal: totalAmount
         });
 
-        // Add headers for the "INVOICE FORMATE" section
-        worksheet.addRow([]);
-        worksheet.addRow(['INVOICE FORMATE', 'Unit Rate', 'Qty.', 'Amount', 'GST 18%', 'Total Amount']);
-
-        // Add data for the invoice in the "INVOICE FORMATE" section
-        worksheet.addRow({
-            unitRate: totalAmount - totalGST,
-            gst: totalGST,
-            totalAmount: totalAmount
-        });
+        // Apply bold style to the total row
+        totalRow.font = { bold: true };
 
         const buffer = await workbook.xlsx.writeBuffer();
 
         res.setHeader('Content-Type', 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet');
-        res.setHeader('Content-Disposition', 'attachment; filename=bill.xlsx');
+        res.setHeader('Content-Disposition', 'attachment; filename=invoice.xlsx');
         res.send(buffer);
     } catch (e) {
         res.status(500).send();
     }
+};
+
+
+const createInvoice = async (bill) => {
+    const products = bill.products.map(product => {
+        const amount = product.price * product.quantity;
+        const gst = amount * (product.saleTaxPercentage / 100);
+        const total = amount + gst;
+
+        return {
+            quantity: product.quantity,
+            description: product.name,
+            tax: gst,
+            price: total
+        };
+    });
+
+    const data = {
+        //"documentTitle": "RECEIPT", //Defaults to INVOICE
+        "currency": "USD",
+        "taxNotation": "vat", //or gst
+        "marginTop": 25,
+        "marginRight": 25,
+        "marginLeft": 25,
+        "marginBottom": 25,
+        "logo": "https://public.easyinvoice.cloud/img/logo_en_original.png", //or base64
+        //"logoExtension": "png", //only when logo is base64
+        "sender": {
+            "company": "MIAN ABDUL SHAKOOR TRADERS",
+            "address": "Sample Street 123",
+            "zip": "1234 AB",
+            "city": "Toba Tek Singh",
+            "country": "Pakistan"
+            //"custom1": "custom value 1",
+            //"custom2": "custom value 2",
+            //"custom3": "custom value 3"
+        },
+        "client": {
+            "company": bill.customer.name,
+            "address": bill.customer.address,
+            "zip": "",
+            "city": "",
+            "country": ""
+        },
+        "invoiceNumber": bill.billNumber,
+        "invoiceDate": bill.date,
+        "products": products,
+        "bottomNotice": "Kindly pay your invoice within 15 days."
+    };
+
+    const result = await easyinvoice.createInvoice(data);
+    return Buffer.from(result.pdf, 'base64');
+};
+export const getInvoiceAsExcel = async (req, res) => {
+    const bill = await Bill.findById(req.params.id).populate('customer').populate('department').populate('item').populate('products');
+
+    if (!bill) {
+        return res.status(404).send();
+    }
+
+    const pdf = await createInvoice(bill);
+
+    res.setHeader('Content-Type', 'application/pdf');
+    res.setHeader('Content-Disposition', 'attachment; filename=invoice.pdf');
+    res.send(pdf);
 };
