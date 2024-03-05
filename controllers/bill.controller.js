@@ -30,10 +30,10 @@ export const readBills = async (req, res) => {
 
         // Fetch a page of bills
         const bills = await Bill.find()
-        .populate('customer')
-        .populate('department')
-        .populate('item')
-        .limit(limit).skip(startIndex);
+            .populate('customer')
+            .populate('department')
+            .populate('item')
+            .limit(limit).skip(startIndex);
 
         // Calculate total pages
         const totalPages = Math.ceil(total / limit);
@@ -73,7 +73,7 @@ export const readBill = async (req, res) => {
 
 export const updateBill = async (req, res) => {
     const updates = Object.keys(req.body);
-    const allowedUpdates = ['customer', 'department', 'items','totalSaleTax', 'totalIncomeTax', 'total'];
+    const allowedUpdates = ['billNumber', 'customer', 'department', 'products', 'items', 'totalSaleTax', 'totalIncomeTax', 'total'];
     const isValidOperation = updates.every((update) => allowedUpdates.includes(update));
 
     if (!isValidOperation) {
