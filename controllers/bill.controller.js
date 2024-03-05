@@ -73,7 +73,7 @@ export const readBill = async (req, res) => {
 
 export const updateBill = async (req, res) => {
     const updates = Object.keys(req.body);
-    const allowedUpdates = ['billNumber', 'customer', 'department', 'products', 'items', 'totalSaleTax', 'totalIncomeTax', 'total'];
+    const allowedUpdates = ['billNumber', 'customer', 'department', 'products', 'item', 'totalSaleTax', 'totalIncomeTax', 'total'];
     const isValidOperation = updates.every((update) => allowedUpdates.includes(update));
 
     if (!isValidOperation) {
