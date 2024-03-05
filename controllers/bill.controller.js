@@ -1,4 +1,5 @@
 import { Bill } from "../schemas/bill.schema.js";
+import ExcelJS from "exceljs";
 
 export const createBill = async (req, res) => {
     const bill = new Bill({
@@ -106,4 +107,75 @@ export const deleteBill = async (req, res) => {
         res.status(500).json({ status: false, message: error });
     }
 
+};
+
+export const getBillAsExcel = async (req, res) => {
+    try {
+        const bill = await Bill.findById(req.params.id).populate('customer').populate('department').populate('item').populate('products');
+
+        if (!bill) {
+            return res.status(404).send();
+        }
+
+        const workbook = new ExcelJS.Workbook();
+        const worksheet = workbook.addWorksheet('Bill');
+
+        // Add headers for the "BILL FORMATE" section
+        worksheet.columns = [
+            { header: 'Product', key: 'product' },
+            { header: 'Unit Rate', key: 'unitRate' },
+            { header: 'Qty.', key: 'quantity' },
+            { header: 'Amount', key: 'amount' },
+            { header: 'GST 18%', key: 'gst' },
+            { header: 'Total Amount', key: 'totalAmount' }
+        ];
+
+        // Add data for each product in the "BILL FORMATE" section
+        let totalGST = 0;
+        let totalAmount = 0;
+        bill.products.forEach(product => {
+            const amount = product.price * product.quantity;
+            const gst = amount * (product.saleTaxPercentage / 100);
+            const total = amount + gst;
+
+            worksheet.addRow({
+                product: product.name,
+                unitRate: product.price,
+                quantity: product.quantity,
+                amount: amount,
+                gst: gst,
+                totalAmount: total
+            });
+
+            totalGST += gst;
+            totalAmount += total;
+        });
+
+        // Add total row in the "BILL FORMATE" section
+        worksheet.addRow({
+            unitRate: 'Total:',
+            amount: totalAmount - totalGST,
+            gst: totalGST,
+            totalAmount: totalAmount
+        });
+
+        // Add headers for the "INVOICE FORMATE" section
+        worksheet.addRow([]);
+        worksheet.addRow(['INVOICE FORMATE', 'Unit Rate', 'Qty.', 'Amount', 'GST 18%', 'Total Amount']);
+
+        // Add data for the invoice in the "INVOICE FORMATE" section
+        worksheet.addRow({
+            unitRate: totalAmount - totalGST,
+            gst: totalGST,
+            totalAmount: totalAmount
+        });
+
+        const buffer = await workbook.xlsx.writeBuffer();
+
+        res.setHeader('Content-Type', 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet');
+        res.setHeader('Content-Disposition', 'attachment; filename=bill.xlsx');
+        res.send(buffer);
+    } catch (e) {
+        res.status(500).send();
+    }
 };
