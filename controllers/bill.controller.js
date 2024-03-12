@@ -63,7 +63,10 @@ export const readBills = async (req, res) => {
 
 export const readBill = async (req, res) => {
     try {
-        const bill = await Bill.findById(req.params.id);
+        const bill = await Bill.findById(req.params.id)
+            .populate('customer')
+            .populate('department')
+            .populate('item');
         if (!bill) res.status(404).json({ status: false, message: "Bill not found" });
         else res.status(200).json({ status: true, message: "Bill find successfully", bill });
     } catch (error) {
