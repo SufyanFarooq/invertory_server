@@ -8,7 +8,7 @@ const department = require("./routes/department.route.js");
 const customer = require("./routes/customers.route.js");
 const bill = require("./routes/bill.route.js");
 
-
+require('dotenv').config()
 
 
 
