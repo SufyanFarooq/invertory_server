@@ -18,7 +18,7 @@ app.use(express.json());
 app.use(bodyParser.json());
 app.use(cors());
 // define routes
-app.use("/api", products);
+app.use("/product", products);
 app.use("/api", items);
 app.use("/api", department);
 app.use("/api", customer);
