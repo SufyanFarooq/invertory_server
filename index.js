@@ -27,9 +27,9 @@ app.use("/api", bill);
 
 
 
-app.get("/", (req, res) => {
-    res.status(200).send("ticket server running successfully")
-});
+// app.get("/", (req, res) => {
+//     res.status(200).send("ticket server running successfully")
+// });
 
 const PORT = process.env.PORT || 3031;
 app.listen(PORT, () => {
