@@ -27,7 +27,7 @@ app.use("/api", bill);
 
 
 
-app.get("/", (req, res) => {
+app.get("/home", (req, res) => {
     res.status(200).send("ticket server running successfully")
 });
 
