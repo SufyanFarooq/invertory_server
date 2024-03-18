@@ -7,6 +7,7 @@ const items = require("./routes/item.route.js");
 const department = require("./routes/department.route.js");
 const customer = require("./routes/customers.route.js");
 const bill = require("./routes/bill.route.js");
+const { Product } = require('./schemas/product.schema.js');
 
 require('dotenv').config()
 
@@ -27,8 +28,9 @@ app.use("/api", bill);
 
 
 
-app.get("/home", (req, res) => {
-    res.status(200).send("ticket server running successfully")
+app.get("/home", async (req, res) => {
+    const prducts = await Product.find();
+    res.status(200).json(prducts)
 });
 
 const PORT = process.env.PORT || 3031;
