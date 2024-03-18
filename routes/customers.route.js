@@ -1,5 +1,5 @@
-import { addCustomer, getCustomers, getCustomerbyId, updateCustomer, deleteCustomer } from "../controllers/customers.controller.js";
-import express from "express";
+const { addCustomer, getCustomers, getCustomerbyId, updateCustomer, deleteCustomer } = require ("../controllers/customers.controller");
+const express = require("express");
 
 const router = express.Router();
 
@@ -10,4 +10,4 @@ router.route("/customer/:id").put(updateCustomer);
 router.route("/customer/:id").delete(deleteCustomer);
 
 
-export default router;
+module.exports = router;

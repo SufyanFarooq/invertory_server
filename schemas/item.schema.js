@@ -1,4 +1,4 @@
-import mongoose from 'mongoose';
+const mongoose = require('mongoose');
 
 const itemSchema = new mongoose.Schema({
     name: {
@@ -7,4 +7,4 @@ const itemSchema = new mongoose.Schema({
     }
 });
 
-export const Item = mongoose.model('Item', itemSchema);
+exports.Item = mongoose.model('Item', itemSchema);

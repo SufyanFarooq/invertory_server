@@ -1,6 +1,6 @@
 // create db connection 
-import mongoose from "mongoose"
-import { db_url } from "../config.js"
+const mongoose = require('mongoose');
+const { db_url } = require("../config");
 
 const dbConnection = () => {
     try {
@@ -11,4 +11,4 @@ const dbConnection = () => {
     }
 }
 
-export default dbConnection;
+module.exports = dbConnection;

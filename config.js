@@ -1,1 +1,1 @@
-export const db_url = "mongodb+srv://sufyan:Sufi2580@cluster0.cfagffx.mongodb.net/";
+exports.db_url = "mongodb+srv://sufyan:Sufi2580@cluster0.cfagffx.mongodb.net/";

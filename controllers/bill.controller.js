@@ -1,7 +1,7 @@
-import { Bill } from "../schemas/bill.schema.js";
-import ExcelJS from "exceljs";
-import easyinvoice from "easyinvoice"
-export const createBill = async (req, res) => {
+const { Bill } = require("../schemas/bill.schema");
+const ExcelJS = require("exceljs");
+const easyinvoice = require("easyinvoice");
+exports.createBill = async (req, res) => {
     const bill = new Bill({
         ...req.body
     });
@@ -14,7 +14,7 @@ export const createBill = async (req, res) => {
     }
 };
 
-export const readBills = async (req, res) => {
+exports.readBills = async (req, res) => {
     // Extract page and limit from query parameters
     let { page, limit } = req.query;
 
@@ -61,7 +61,7 @@ export const readBills = async (req, res) => {
     }
 };
 
-export const readBill = async (req, res) => {
+exports.readBill = async (req, res) => {
     try {
         const bill = await Bill.findById(req.params.id)
             .populate('customer')
@@ -75,7 +75,7 @@ export const readBill = async (req, res) => {
 
 };
 
-export const updateBill = async (req, res) => {
+exports.updateBill = async (req, res) => {
     const updates = Object.keys(req.body);
     const allowedUpdates = ['billNumber', 'customer', 'department', 'products', 'item', 'totalSaleTax', 'totalIncomeTax', 'total'];
     const isValidOperation = updates.every((update) => allowedUpdates.includes(update));
@@ -99,7 +99,7 @@ export const updateBill = async (req, res) => {
     }
 };
 
-export const deleteBill = async (req, res) => {
+exports.deleteBill = async (req, res) => {
     try {
         const bill = await Bill.findByIdAndDelete(req.params.id);
 
@@ -112,7 +112,7 @@ export const deleteBill = async (req, res) => {
 
 };
 
-export const getBillAsExcel = async (req, res) => {
+exports.getBillAsExcel = async (req, res) => {
     try {
         const bill = await Bill.findById(req.params.id).populate('customer').populate('department').populate('item').populate('products');
 
@@ -239,7 +239,7 @@ const createInvoice = async (bill) => {
     const result = await easyinvoice.createInvoice(data);
     return Buffer.from(result.pdf, 'base64');
 };
-export const getInvoiceAsExcel = async (req, res) => {
+exports.getInvoiceAsExcel = async (req, res) => {
     const bill = await Bill.findById(req.params.id).populate('customer').populate('department').populate('item').populate('products');
 
     if (!bill) {

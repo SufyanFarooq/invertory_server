@@ -1,4 +1,4 @@
-import mongoose from 'mongoose';
+const mongoose = require('mongoose');
 
 const billSchema = new mongoose.Schema({
     billNumber: {
@@ -56,4 +56,4 @@ const billSchema = new mongoose.Schema({
     }
 }, { timestamps: true });
 
-export const Bill = mongoose.model('Bill', billSchema);
+exports.Bill = mongoose.model('Bill', billSchema);

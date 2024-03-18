@@ -1,7 +1,7 @@
-import { Product } from "../schemas/product.schema.js";
+const { Product } = require("../schemas/product.schema");
 
 
-export const addProduct = async (req, res) => {
+exports.addProduct = async (req, res) => {
     try {
         const product = new Product(req.body);
         await product.save();
@@ -11,7 +11,7 @@ export const addProduct = async (req, res) => {
     }
 };
 
-export const getProducts = async (req, res) => {
+exports.getProducts = async (req, res) => {
     // Extract page and limit from query parameters
     let { page, limit } = req.query;
 
@@ -55,7 +55,7 @@ export const getProducts = async (req, res) => {
 };
 
 
-export const getProductbyId = async (req, res) => {
+exports.getProductbyId = async (req, res) => {
     try {
         const product = await Product.findById(req.params.id);
         if (!product) res.status(404).json({ status: false, message: "Product not found" });
@@ -66,10 +66,10 @@ export const getProductbyId = async (req, res) => {
 
 };
 
-export const updateProduct = async (req, res) => {
+exports.updateProduct = async (req, res) => {
     try {
         const { name, price, saleTaxPercentage, incomeTaxPercentage } = req.body;
-        const product = await Product.findByIdAndUpdate(req.params.id, {name, price, saleTaxPercentage, incomeTaxPercentage}, { new: true });
+        const product = await Product.findByIdAndUpdate(req.params.id, { name, price, saleTaxPercentage, incomeTaxPercentage }, { new: true });
         if (!product) res.status(404).json({ status: false, message: "Product not found" });
         else res.status(200).json({ status: true, message: "Product updated successfully", product });
     } catch (error) {
@@ -77,7 +77,7 @@ export const updateProduct = async (req, res) => {
     }
 };
 
-export const deleteProduct = async (req, res) => {
+exports.deleteProduct = async (req, res) => {
     try {
         const product = await Product.findByIdAndDelete(req.params.id);
 

@@ -1,5 +1,5 @@
-import { addItem, getItems, getItembyId, updateItem, deleteItem } from "../controllers/item.controller.js";
-import express from "express";
+const { addItem, getItems, getItembyId, updateItem, deleteItem } = require ("../controllers/item.controller");
+const express = require("express");
 
 const router = express.Router();
 
@@ -10,4 +10,4 @@ router.route("/item/:id").put(updateItem);
 router.route("/item/:id").delete(deleteItem);
 
 
-export default router;
+module.exports = router;

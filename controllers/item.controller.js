@@ -1,7 +1,7 @@
-import { Item } from "../schemas/item.schema.js";
+const { Item } = require ("../schemas/item.schema");
 
 
-export const addItem = async (req, res) => {
+exports.addItem = async (req, res) => {
     try {
         const item = new Item(req.body);
         await item.save();
@@ -11,7 +11,7 @@ export const addItem = async (req, res) => {
     }
 };
 
-export const getItems = async (req, res) => {
+exports.getItems = async (req, res) => {
     // Extract page and limit from query parameters
     let { page, limit } = req.query;
 
@@ -55,7 +55,7 @@ export const getItems = async (req, res) => {
 };
 
 
-export const getItembyId = async (req, res) => {
+exports.getItembyId = async (req, res) => {
     try {
         const item = await Item.findById(req.params.id);
         if (!item) res.status(404).json({ status: false, message: "Item not found" });
@@ -66,7 +66,7 @@ export const getItembyId = async (req, res) => {
 
 };
 
-export const updateItem = async (req, res) => {
+exports.updateItem = async (req, res) => {
     try {
         const item = await Item.findByIdAndUpdate(req.params.id, {
             name: req.body.name,
@@ -79,7 +79,7 @@ export const updateItem = async (req, res) => {
     }
 };
 
-export const deleteItem = async (req, res) => {
+exports.deleteItem = async (req, res) => {
     try {
         const item = await Item.findByIdAndDelete(req.params.id);
 

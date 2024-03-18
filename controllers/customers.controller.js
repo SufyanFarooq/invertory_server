@@ -1,7 +1,7 @@
-import { Customer } from "../schemas/customer.schema.js";
+const { Customer } = require ("../schemas/customer.schema");
 
 
-export const addCustomer = async (req, res) => {
+exports.addCustomer = async (req, res) => {
     try {
         const customer = new Customer(req.body);
         await customer.save();
@@ -11,7 +11,7 @@ export const addCustomer = async (req, res) => {
     }
 };
 
-export const getCustomers = async (req, res) => {
+exports.getCustomers = async (req, res) => {
     // Extract page and limit from query parameters
     let { page, limit } = req.query;
 
@@ -55,7 +55,7 @@ export const getCustomers = async (req, res) => {
 };
 
 
-export const getCustomerbyId = async (req, res) => {
+exports.getCustomerbyId = async (req, res) => {
     try {
         const customer = await Customer.findById(req.params.id);
         if (!customer) res.status(404).json({ status: false, message: "Customer not found" });
@@ -66,7 +66,7 @@ export const getCustomerbyId = async (req, res) => {
 
 };
 
-export const updateCustomer = async (req, res) => {
+exports.updateCustomer = async (req, res) => {
     try {
         const { name, address, CNIC, mobile } = req.body;
         const customer = await Customer.findByIdAndUpdate(req.params.id, { name, address, CNIC, mobile }, { new: true });
@@ -78,7 +78,7 @@ export const updateCustomer = async (req, res) => {
     }
 };
 
-export const deleteCustomer = async (req, res) => {
+exports.deleteCustomer = async (req, res) => {
     try {
         const customer = await Customer.findByIdAndDelete(req.params.id);
 

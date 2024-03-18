@@ -1,12 +1,12 @@
-import express from 'express';
-import cors from "cors";
-import bodyParser from "body-parser";
-import dbConnection from './connection/db.js';
-import products from "./routes/product.route.js";
-import items from "./routes/item.route.js";
-import department from "./routes/department.route.js";
-import customer from "./routes/customers.route.js";
-import bill from "./routes/bill.route.js";
+const express = require('express');
+const cors = require("cors");
+const bodyParser = require("body-parser");
+const dbConnection = require('./connection/db.js');
+const products = require("./routes/product.route.js");
+const items = require("./routes/item.route.js");
+const department = require("./routes/department.route.js");
+const customer = require("./routes/customers.route.js");
+const bill = require("./routes/bill.route.js");
 
 
 

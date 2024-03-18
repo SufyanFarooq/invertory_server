@@ -1,7 +1,7 @@
-import { Department } from "../schemas/department.schema.js";
+const { Department } = require ("../schemas/department.schema");
 
 
-export const addDepartment = async (req, res) => {
+exports.addDepartment = async (req, res) => {
     try {
         const department = new Department(req.body);
         await department.save();
@@ -11,7 +11,7 @@ export const addDepartment = async (req, res) => {
     }
 };
 
-export const getDepartments = async (req, res) => {
+exports.getDepartments = async (req, res) => {
     // Extract page and limit from query parameters
     let { page, limit } = req.query;
 
@@ -55,7 +55,7 @@ export const getDepartments = async (req, res) => {
 };
 
 
-export const getDepartmentbyId = async (req, res) => {
+exports.getDepartmentbyId = async (req, res) => {
     try {
         const department = await Department.findById(req.params.id);
         if (!department) res.status(404).json({ status: false, message: "Department not found" });
@@ -66,7 +66,7 @@ export const getDepartmentbyId = async (req, res) => {
 
 };
 
-export const updateDepartment = async (req, res) => {
+exports.updateDepartment = async (req, res) => {
     try {
         const department = await Department.findByIdAndUpdate(req.params.id, {
             name: req.body.name,
@@ -79,7 +79,7 @@ export const updateDepartment = async (req, res) => {
     }
 };
 
-export const deleteDepartment = async (req, res) => {
+exports.deleteDepartment = async (req, res) => {
     try {
         const department = await Department.findByIdAndDelete(req.params.id);
 
