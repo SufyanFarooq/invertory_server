@@ -1,4 +1,4 @@
-import { addDepartment, getDepartments, getDepartmentbyId, updateDepartment, deleteDepartment } from "../controllers/department.controller.mjs";
+import { addDepartment, getDepartments, getDepartmentbyId, updateDepartment, deleteDepartment } from "../controllers/department.controller.js";
 import express from "express";
 
 const router = express.Router();
