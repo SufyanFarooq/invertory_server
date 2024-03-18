@@ -18,7 +18,7 @@ app.use(express.json());
 app.use(bodyParser.json());
 app.use(cors());
 // define routes
-app.use("/product", products);
+app.use("/api", products);
 app.use("/api", items);
 app.use("/api", department);
 app.use("/api", customer);
@@ -36,3 +36,5 @@ app.listen(PORT, () => {
     dbConnection()
     console.log(`Server running on port http://localhost:${PORT}`);
 });
+
+module.exports = app; 
