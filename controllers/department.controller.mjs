@@ -1,4 +1,4 @@
-import { Department } from "../schemas/department.schema.js";
+import { Department } from "../schemas/department.schema.mjs";
 
 
 export const addDepartment = async (req, res) => {

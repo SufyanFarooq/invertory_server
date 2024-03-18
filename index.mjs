@@ -4,7 +4,7 @@ import bodyParser from "body-parser";
 import dbConnection from './connection/db.js';
 import products from "./routes/product.route.js";
 import items from "./routes/item.route.js";
-import department from "./routes/department.route.js";
+import department from "./routes/department.route.mjs";
 import customer from "./routes/customers.route.js";
 import bill from "./routes/bill.route.js";
 

@@ -2,7 +2,8 @@ import mongoose from 'mongoose';
 
 const departmentSchema = new mongoose.Schema({
     name: {
-        type: String
+        type: String,
+        required: true
     }
 });
 
