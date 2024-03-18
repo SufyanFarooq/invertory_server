@@ -18,7 +18,7 @@ app.use(express.json());
 app.use(bodyParser.json());
 app.use(cors());
 // define routes
-app.use("/", products);
+app.use("/api", products);
 app.use("/api", items);
 app.use("/api", department);
 app.use("/api", customer);
@@ -27,9 +27,9 @@ app.use("/api", bill);
 
 
 
-// app.get("/", (req, res) => {
-//     res.status(200).send("ticket server running successfully")
-// });
+app.get("/", (req, res) => {
+    res.status(200).send("ticket server running successfully")
+});
 
 const PORT = process.env.PORT || 3031;
 app.listen(PORT, () => {
