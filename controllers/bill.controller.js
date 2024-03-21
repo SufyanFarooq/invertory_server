@@ -297,11 +297,11 @@ if(!bills.length){
 
     bills.forEach(bill => {
         const totalSaleTax = bill.products.reduce((total, product) => {
-            return product.saleTaxPercentage !== 0 ? total + product.price * product.quantity : total;
+            return total+ product.saleTaxPercentage;
         }, 0);
 
         const total = bill.products.reduce((total, product) => {
-            return total + product.price * product.quantity;
+            return  product.saleTaxPercentage !== 0 ? total + product.price * product.quantity : 0;
         }, 0);
 
         const grandTotal = total + totalSaleTax;
@@ -311,7 +311,7 @@ if(!bills.length){
             customer: bill.customer.name,
             department: bill.department.name,
             item: bill.item.name,
-            total: total - totalSaleTax,
+            total: total,
             totalSaleTax: totalSaleTax,
             grandTotal: grandTotal
         });
