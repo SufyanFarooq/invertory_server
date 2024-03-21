@@ -1,6 +1,7 @@
 const { Bill } = require("../schemas/bill.schema");
 const ExcelJS = require("exceljs");
 const easyinvoice = require("easyinvoice");
+
 exports.createBill = async (req, res) => {
     const bill = new Bill({
         ...req.body
@@ -112,6 +113,20 @@ exports.deleteBill = async (req, res) => {
 
 };
 
+exports.getLatestBillNumber = async (req, res) => {
+    try {
+        const latestBill = await Bill.findOne().sort({ billNumber: -1 }); // Get the latest bill based on billNumber
+        let latestBillNumber = 1; // Default value if no bill exists
+
+        if (latestBill) {
+            latestBillNumber = latestBill.billNumber + 1; // Increment the latest bill number
+        }
+
+        res.status(200).json({ status: true, latestBillNumber });
+    } catch (err) {
+        res.status(500).json({ status: false, message: "An error occurred", error: err.message });
+    }
+};
 exports.getBillAsExcel = async (req, res) => {
     try {
         const bill = await Bill.findById(req.params.id).populate('customer').populate('department').populate('item').populate('products');

@@ -1,15 +1,17 @@
-const { createBill, readBills, readBill, updateBill, deleteBill, getBillAsExcel, getInvoiceAsExcel } = require ("../controllers/bill.controller");
+const { createBill, readBills, readBill, updateBill, deleteBill, getBillAsExcel, getInvoiceAsExcel, getLatestBillNumber } = require("../controllers/bill.controller");
 const express = require("express");
 
 const router = express.Router();
 
-router.route("/bill").post(createBill);
-router.route("/bill").get(readBills);
-router.route("/bill/:id").get(readBill);
-router.route("/bill/:id").put(updateBill);
-router.route("/bill/:id").delete(deleteBill);
-router.route("/bill/getBillAsExcel/:id").get(getBillAsExcel);
-router.route("/bill/getInvoiceAsExcel/:id").get(getInvoiceAsExcel)
+router.post("/bill", createBill);
+router.get("/bill", readBills);
+router.get("/bill/:id", readBill);
+router.put("/bill/:id", updateBill);
+router.delete("/bill/:id", deleteBill);
+// Route to get the latest bill number
+router.get('/latestBillNumber', getLatestBillNumber);
+router.get("/bill/getBillAsExcel/:id", getBillAsExcel);
+router.get("/bill/getInvoiceAsExcel/:id", getInvoiceAsExcel);
 
 
 module.exports = router;
