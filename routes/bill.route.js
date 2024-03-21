@@ -10,8 +10,8 @@ router.put("/bill/:id", updateBill);
 router.delete("/bill/:id", deleteBill);
 // Route to get the latest bill number
 router.get('/latestBillNumber', getLatestBillNumber);
-router.get("/bill/getBillAsExcel/:id", getBillAsExcel);
-router.get("/bill/getInvoiceAsExcel", getInvoicesbyDate);
+// router.get("/bill/getBillAsExcel/:id", getBillAsExcel);
+router.route("/getInvoiceAsExcel").get(getInvoicesbyDate);
 
 
 module.exports = router;
