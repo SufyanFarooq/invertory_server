@@ -275,8 +275,8 @@ try {
     const { startDate, endDate } = req.query;
     const bills = await Bill.find({
         createdAt: {
-            $gte: new Date(startDate),
-            $lte: new Date(endDate)
+            $gte: new Date(startDate * 1000), // Convert Unix timestamp to JavaScript Date
+            $lte: new Date(endDate * 1000) // Convert Unix timestamp to JavaScript Date
         }
     }).populate('customer').populate('department').populate('item').populate('products');
 if(!bills.length){
