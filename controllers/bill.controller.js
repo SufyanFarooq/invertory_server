@@ -267,3 +267,60 @@ exports.getInvoiceAsExcel = async (req, res) => {
     res.setHeader('Content-Disposition', 'attachment; filename=invoice.pdf');
     res.send(pdf);
 };
+
+
+exports.getInvoicesbyDate = async (req, res) => {
+try {
+    const { startDate, endDate } = req.query;
+    const bills = await Bill.find({
+        createdAt: {
+            $gte: new Date(startDate),
+            $lte: new Date(endDate)
+        }
+    }).populate('customer').populate('department').populate('item').populate('products');
+
+    const workbook = new ExcelJS.Workbook();
+    const worksheet = workbook.addWorksheet('Bills');
+
+    worksheet.columns = [
+        { header: 'Bill Number', key: 'billNumber', width: 15 },
+        { header: 'Customer', key: 'customer', width: 30 },
+        { header: 'Department', key: 'department', width: 30 },
+        { header: 'Item', key: 'item', width: 30 },
+        { header: 'Total', key: 'total', width: 15 },
+        { header: 'Total Sale Tax', key: 'totalSaleTax', width: 15 },
+        { header: 'Grand Total', key: 'grandTotal', width: 15 }
+    ];
+
+    bills.forEach(bill => {
+        const totalSaleTax = bill.products.reduce((total, product) => {
+            return product.saleTaxPercentage !== 0 ? total + product.price * product.quantity : total;
+        }, 0);
+
+        const total = bill.products.reduce((total, product) => {
+            return total + product.price * product.quantity;
+        }, 0);
+
+        const grandTotal = total + totalSaleTax;
+
+        worksheet.addRow({
+            billNumber: bill.billNumber,
+            customer: bill.customer.name,
+            department: bill.department.name,
+            item: bill.item.name,
+            total: total,
+            totalSaleTax: totalSaleTax,
+            grandTotal: grandTotal
+        });
+    });
+
+    const buffer = await workbook.xlsx.writeBuffer();
+
+    res.setHeader('Content-Type', 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet');
+    res.setHeader('Content-Disposition', 'attachment; filename=invoices.xlsx');
+    res.send(buffer);
+} catch (error) {
+    console.log("error", error);
+    res.status(500).json({ status: false, message: error });
+}
+}
