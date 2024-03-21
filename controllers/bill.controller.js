@@ -287,6 +287,7 @@ exports.getInvoicesbyDate = async (req, res) => {
 
         worksheet.columns = [
             { header: 'Bill Number', key: 'billNumber', width: 15 },
+            { header: 'Date', key: 'date', width: 15 },
             { header: 'Customer', key: 'customer', width: 30 },
             { header: 'Department', key: 'department', width: 30 },
             { header: 'Item', key: 'item', width: 30 },
@@ -305,9 +306,16 @@ exports.getInvoicesbyDate = async (req, res) => {
             }, 0);
 
             const grandTotal = total + totalSaleTax;
+            const date = new Date(bill.createdAt);
+            const formattedDateString = date.toLocaleDateString("en-US", {
+                year: "numeric",
+                month: "long",
+                day: "numeric",
+            });
 
             worksheet.addRow({
                 billNumber: bill.billNumber,
+                date: formattedDateString,
                 customer: bill.customer.name,
                 department: bill.department.name,
                 item: bill.item.name,
