@@ -311,7 +311,7 @@ if(!bills.length){
             customer: bill.customer.name,
             department: bill.department.name,
             item: bill.item.name,
-            total: total,
+            total: total - totalSaleTax,
             totalSaleTax: totalSaleTax,
             grandTotal: grandTotal
         });
