@@ -27,7 +27,8 @@ exports.getProducts = async (req, res) => {
         const startIndex = (page - 1) * limit;
 
         // Fetch a page of products
-        const products = await Product.find().limit(limit).skip(startIndex);
+        // const products = await Product.find().limit(limit).skip(startIndex);
+        const products = await Product.find()
 
         // Calculate total pages
         const totalPages = Math.ceil(total / limit);

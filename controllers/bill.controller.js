@@ -31,12 +31,15 @@ exports.readBills = async (req, res) => {
         const startIndex = (page - 1) * limit;
 
         // Fetch a page of bills
+        // const bills = await Bill.find()
+        //     .populate('customer')
+        //     .populate('department')
+        //     .populate('item')
+        //     .limit(limit).skip(startIndex);
         const bills = await Bill.find()
             .populate('customer')
             .populate('department')
-            .populate('item')
-            .limit(limit).skip(startIndex);
-
+            .populate('item');
         // Calculate total pages
         const totalPages = Math.ceil(total / limit);
 

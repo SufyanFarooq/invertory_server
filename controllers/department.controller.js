@@ -27,7 +27,8 @@ exports.getDepartments = async (req, res) => {
         const startIndex = (page - 1) * limit;
 
         // Fetch a page of departments
-        const departments = await Department.find().limit(limit).skip(startIndex);
+        // const departments = await Department.find().limit(limit).skip(startIndex);
+        const departments = await Department.find()
 
         // Calculate total pages
         const totalPages = Math.ceil(total / limit);

@@ -27,7 +27,8 @@ exports.getItems = async (req, res) => {
         const startIndex = (page - 1) * limit;
 
         // Fetch a page of items
-        const items = await Item.find().limit(limit).skip(startIndex);
+        // const items = await Item.find().limit(limit).skip(startIndex);
+        const items = await Item.find()
 
         // Calculate total pages
         const totalPages = Math.ceil(total / limit);

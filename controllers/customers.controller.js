@@ -27,7 +27,8 @@ exports.getCustomers = async (req, res) => {
         const startIndex = (page - 1) * limit;
 
         // Fetch a page of customers
-        const customers = await Customer.find().limit(limit).skip(startIndex);
+        // const customers = await Customer.find().limit(limit).skip(startIndex);
+        const customers = await Customer.find()
 
         // Calculate total pages
         const totalPages = Math.ceil(total / limit);
