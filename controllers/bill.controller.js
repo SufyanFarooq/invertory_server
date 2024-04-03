@@ -118,7 +118,8 @@ exports.deleteBill = async (req, res) => {
 
 exports.getLatestBillNumber = async (req, res) => {
     try {
-        const latestBill = await Bill.findOne().sort({ billNumber: -1 }); // Get the latest bill based on billNumber
+        const latestBill = await Bill.findOne().sort({ _id: -1 }); // Get the latest bill based on _id
+
         let latestBillNumber = 1; // Default value if no bill exists
 
         if (latestBill) {
@@ -130,6 +131,7 @@ exports.getLatestBillNumber = async (req, res) => {
         res.status(500).json({ status: false, message: "An error occurred", error: err.message });
     }
 };
+
 // exports.getBillAsExcel = async (req, res) => {
 //     try {
 //         const bill = await Bill.findById(req.params.id).populate('customer').populate('department').populate('item').populate('products');
